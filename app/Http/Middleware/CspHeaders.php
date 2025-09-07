@@ -10,22 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CspHeaders
 {
-    private string $cspHeader = "
-        default-src 'self';
-        script-src 'self' 'unsafe-inline' 'nonce-';
-        style-src 'self' 'unsafe-inline' 'nonce-';
-        img-src 'self' data:;
-        font-src 'self';
-        connect-src 'self';
-        object-src 'none';
-        base-uri 'self';
-        frame-ancestors 'none';
-    ";
-
-    public function __construct()
-    {
-        $this->cspHeader = preg_replace("/\s{2,}/", "", $this->cspHeader);
-    }
+    private string $devHost = "http://[::1]:5173";
+    private string $devWs = "ws://[::1]:5173";
 
     /**
      * Handle an incoming request.
@@ -36,8 +22,22 @@ class CspHeaders
     {
         Vite::useCspNonce();
 
+        $nonce = Vite::cspNonce();
+
+        $cspHeader = "
+            default-src 'self' $this->devHost;
+            script-src 'self' 'unsafe-inline' 'nonce-$nonce' $this->devHost;
+            style-src 'self' 'unsafe-inline' 'nonce-$nonce' $this->devHost;
+            img-src 'self' data: $this->devHost;
+            font-src 'self' $this->devHost;
+            connect-src 'self' $this->devHost $this->devWs;
+            object-src 'none';
+            base-uri 'self';
+            frame-ancestors 'none';
+        ";
+
         return $next($request)->withHeaders([
-            "Content-Security-Policy" => str_replace("'nonce-'", "'nonce-" . Vite::cspNonce() . "'", $this->cspHeader),
+            "Content-Security-Policy" => preg_replace("/\s{2,}/", " ", $cspHeader),
         ]);
     }
 }
