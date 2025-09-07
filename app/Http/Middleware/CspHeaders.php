@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CspHeaders
 {
-    private string $devHost = "http://[::1]:5173";
-    private string $devWs = "ws://[::1]:5173";
+    private string $devHost = "http://host.docker.internal:5173";
+    private string $devWs = "ws://host.docker.internal:5173";
 
     /**
      * Handle an incoming request.
@@ -25,12 +25,12 @@ class CspHeaders
         $nonce = Vite::cspNonce();
 
         $cspHeader = "
-            default-src 'self' $this->devHost;
-            script-src 'self' 'unsafe-inline' 'nonce-$nonce' $this->devHost;
-            style-src 'self' 'unsafe-inline' 'nonce-$nonce' $this->devHost;
-            img-src 'self' data: $this->devHost;
-            font-src 'self' $this->devHost;
-            connect-src 'self' $this->devHost $this->devWs;
+            default-src 'self';
+            script-src 'self' 'unsafe-inline' 'nonce-$nonce';
+            style-src 'self' 'unsafe-inline' 'nonce-$nonce';
+            img-src 'self' data:;
+            font-src 'self';
+            connect-src 'self';
             object-src 'none';
             base-uri 'self';
             frame-ancestors 'none';
