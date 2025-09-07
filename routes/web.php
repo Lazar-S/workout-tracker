@@ -8,7 +8,11 @@ Route::get("/", function () {
 });
 
 Route::get("/login", function() {
-    return "yep";
+    return view("auth.login");
+});
+
+Route::get("/forgot-password", function() {
+    return view("auth.forgot-password");
 });
 
 //Auth
