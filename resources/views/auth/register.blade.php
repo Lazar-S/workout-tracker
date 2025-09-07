@@ -1,7 +1,7 @@
 <x-layout title="Registration">
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 gap-10">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm text-gray-900 flex flex-col justify-center items-center gap-6">
-            <div class="ring-3 rounded-full p-2"><x-icons.biceps-flexed size="48"/></div>
+            <div class="ring-3 rounded-full p-2 -rotate-50"><x-icons.biceps-flexed size="48"/></div>
             <h2 class="text-center text-2xl/9 font-bold tracking-tight">Create an account</h2>
         </div>
         <div class="sm:mx-auto sm:w-full sm:max-w-sm md:max-w-md bg-gray-100 p-6 rounded-2xl">
