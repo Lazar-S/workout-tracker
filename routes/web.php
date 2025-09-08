@@ -22,7 +22,7 @@ Route::post("/register", [UserController::class, "store"]);
 Route::post("/login", [UserController::class, "login"])->name('login');
 Route::post("/logout", [UserController::class, "logout"]);
 Route::get("/tracker", function() {
-    return "tracker page";
+    return view("tracker");
 });
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
