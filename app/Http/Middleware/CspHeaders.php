@@ -10,9 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CspHeaders
 {
-    private string $devHost = "http://host.docker.internal:5173";
-    private string $devWs = "ws://host.docker.internal:5173";
-
     /**
      * Handle an incoming request.
      *

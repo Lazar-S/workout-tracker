@@ -34,5 +34,6 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 //Mail
 Route::get('test', function() {
-    \Illuminate\Support\Facades\Mail::to('lazar.stankovic.dev@gmail.com')->send(new \App\Mail\UserCreated());
+
+
 });
