@@ -19,17 +19,17 @@ Route::get("/forgot-password", function() {
 //Auth
 Route::get("/register", [UserController::class, "create"]);
 Route::post("/register", [UserController::class, "store"]);
-Route::post("/login", [UserController::class, "login"]);
+Route::post("/login", [UserController::class, "login"])->name('login');
 Route::post("/logout", [UserController::class, "logout"]);
 Route::get("/tracker", function() {
     return "tracker page";
 });
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+})->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('/home');
+    return redirect('/');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 //Mail

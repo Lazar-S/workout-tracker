@@ -17,7 +17,7 @@ class UserController extends Controller
         return view("auth.register");
     }
 
-    public function store(): void {
+    public function store(): RedirectResponse {
         $attributes = request()->validate([
             'first_name' => ['required', "min:2"],
             'last_name' => ['required', "min:2"],
@@ -28,7 +28,11 @@ class UserController extends Controller
 
         $user = User::create($attributes);
 
+        Auth::login($user);
+
         event(new Registered($user));
+
+        return redirect()->route('verification.notice');
     }
 
     /**
