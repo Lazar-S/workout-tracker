@@ -1,4 +1,4 @@
-<div class="flex flex-col group not-sm:absolute has-checked:h-full">
+<div class="relative z-10 flex flex-col group not-sm:absolute has-checked:h-full">
     <label class="inline-flex p-2 text-gray-600 sm:hidden">
         <input name="burger" class="invisible h-0 w-0" type="checkbox" />
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -90,7 +90,7 @@
             <a href="#"
                class="flex items-center gap-x-4 px-4 py-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-50">
                 <div class="flex items-center justify-center bg-gray-400 text-gray-100 size-8 rounded-full ring-2">
-                    {{ strtoupper(Auth::user()->first_name[0]) }} {{ strtoupper(Auth::user()->last_name[0]) }}
+                    {{ strtoupper(Auth::user()->first_name[0]) }}{{ strtoupper(Auth::user()->last_name[0]) }}
                 </div>
                 <span class="sr-only">Your profile</span>
                 <span aria-hidden="true">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
