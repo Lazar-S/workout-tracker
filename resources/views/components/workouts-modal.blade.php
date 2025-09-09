@@ -4,7 +4,7 @@
     <div tabindex="0"
          class="rounded-md relative inline-flex flex-col gap-8 bg-white justify-center p-4 focus:outline-none">
         <div class="absolute top-0 right-0 pt-4 pr-4">
-            <button type="button" command="close" commandfor="workouts-modal"
+            <button id="workouts_modal_close_x" type="button"
                     class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600">
                 <span class="sr-only">Close</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon"
@@ -31,14 +31,25 @@
                 @endforeach
         </fieldset>
         <div class="flex gap-2 justify-end">
-            <button type="button" command="close" commandfor="workouts-modal"
-                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto">
+            <button id="create-workout" type="button"
+                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:ml-3 sm:w-auto">
                 Create Workout
             </button>
-            <button type="button" command="close" commandfor="workouts-modal"
+            <button type="button" id="workouts_modal_close_cancel"
                     class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
                 Cancel
             </button>
         </div>
     </div>
+    <script>
+        function closeDialog() {
+            const dialog = document.querySelector("#workouts-modal");
+            if (dialog) dialog.close();
+        }
+
+        const closeX = document.querySelector("#workouts_modal_close_x");
+        const closeCancel = document.querySelector("#workouts_modal_close_cancel");
+        if (closeX) closeX.addEventListener("click", closeDialog);
+        if (closeCancel) closeCancel.addEventListener("click", closeDialog);
+    </script>
 </dialog>
