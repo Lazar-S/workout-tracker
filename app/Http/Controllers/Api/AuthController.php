@@ -60,4 +60,43 @@ class AuthController extends Controller
             'routines' => $routines, // later replace with real routines
         ], 200);
     }
+
+    public function addRoutine(Request $request): JsonResponse
+    {
+        $user = $request->user(); // Sanctum resolves this from the session
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated',
+            ], 401);
+        }
+
+        $routine = WorkoutRoutine::create([
+            'user_id' => $user->id,
+            'workout_id' => $request->workout_id,
+            'workout_name' => $request->workout_name,
+        ]);
+
+        return response()->json([
+            'message' => 'Added new routine successfully',
+            'routine' => [
+                'id' => $routine->id,
+                'workout_id' => $routine->workout_id,
+                'workout_name' => $routine->workout_name,
+            ],
+        ]);
+    }
+
+//    public function updateRoutine(Request $request): JsonResponse
+//    {
+//        $user = $request->user(); // Sanctum resolves this from the session
+//
+//        if (!$user) {
+//            return response()->json([
+//                'message' => 'Unauthenticated',
+//            ], 401);
+//        }
+//
+//        $routine = WorkoutRoutine::find($request->id);
+//    }
 }
