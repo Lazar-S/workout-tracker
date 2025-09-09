@@ -11,9 +11,8 @@
         </div>
     </div>
     <button
+        id="add-workout"
         type="button"
-        commandfor="workouts-modal"
-        command="show-modal"
         class="rounded-sm bg-indigo-600 p-4 text-base font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
     >Add a workout
     </button>
@@ -68,11 +67,12 @@
             if (workoutElement) workoutElement.remove();
         }
 
-        function createWorkoutElement(id, name, sets, reps) {
+        function createWorkoutElement(id, workoutId, name, sets, reps) {
             workouts[`workout-${ id }`] = { id, name, sets, reps };
             return `{{ view(
                 "components.workout", [
                     "id" => "\${id}",
+                    "workout_id" => "\${workoutId}",
                     "name" => "\${name}",
                     "sets" => "\${sets}",
                     "reps" => "\${reps}",
@@ -84,11 +84,22 @@
                 ]) }}`;
         }
 
-        let counter = 5;
-        // const output = document.querySelector("#my-workouts");
-        // if (output) {
-        // output.innerHTML += createWorkoutElement(counter++, "Workout name that wraps", 0, 0);
-        // }
+        document.querySelector("#add-workout").addEventListener("click", () => {
+            const dialog = document.querySelector("dialog");
+
+            const myWorkouts = document.querySelector("#my-workouts");
+            if (myWorkouts && dialog) {
+                dialog.querySelectorAll(`[type="radio"][disabled]`).forEach(node => {
+                    node.disabled = false;
+                });
+                myWorkouts.querySelectorAll(`[data-workout-id]`).forEach(node => {
+                    const element = dialog.querySelector(`[type="radio"][value="${node.dataset.workoutId}"]`);
+                    if (element) element.disabled = true;
+                });
+            }
+
+            if (dialog) dialog.showModal();
+        });
 
         document.querySelector("#make-public").addEventListener("click", async (e) => {
             // maybe disable button while the change is happening
@@ -112,7 +123,7 @@
          */
 
         (async function () {
-            const response = await fetch("/api/routine", {
+            const response = await fetch("/api/routines", {
                 method: "GET",
                 credentials: "include",
                 headers: { "Accept": "application/json" }
@@ -121,9 +132,9 @@
             /**
              * { routines: { id: number; workout_name: string; sets: number; reps; number;  }[] }
              */
-            const newElements = json.routines.map(({ id, workout_name, sets, reps }) => {
+            const newElements = json.routines.map(({ id, workout_id, workout_name, sets, reps }) => {
                 const template = document.createElement("template");
-                template.innerHTML = createWorkoutElement(id, workout_name, sets, reps);
+                template.innerHTML = createWorkoutElement(id, workout_id, workout_name, sets, reps);
                 return template.content;
             });
             const output = document.querySelector("#my-workouts");

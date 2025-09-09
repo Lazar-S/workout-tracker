@@ -1,8 +1,9 @@
-@props(["id", "name", "sets", "reps", "incrSetFn", "decrSetFn", "incrRepFn", "decrRepFn", "delFn"])
+@props(["id", "workout_id", "name", "sets", "reps", "incrSetFn", "decrSetFn", "incrRepFn", "decrRepFn", "delFn"])
 <label
     data-id="workout-{{ $id }}"
+    data-workout-id="{{ $workout_id }}"
     class="group relative block rounded-lg border border-gray-300 bg-white px-6 py-4 has-checked:outline-2 has-checked:-outline-offset-2 has-checked:outline-indigo-600 has-focus-visible:outline-3 has-focus-visible:-outline-offset-1 sm:flex sm:justify-between">
-    <input type="radio" name="plan" value="hobby"
+    <input type="radio" name="workout"
            class="w-0 h-0 appearance-none focus:outline-none"/>
     <span class="flex text-sm basis-2xl gap-6 items-center">
               <span class="font-medium text-gray-900 flex-4">{{ $name }}</span>

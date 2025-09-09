@@ -22,15 +22,13 @@
             </div>
         </div>
         <fieldset class="px-4">
-            <div class="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">
                 @foreach ($workouts as $workout)
-                    <label class="flex justify-between items-center py-4 font-medium text-sm/6 text-gray-900 select-none">
-                        {{ $workout["name"] }}
+                    <label class="group flex justify-between items-center border border-gray-200 p-4 first:rounded-tl-md first:rounded-tr-md last:rounded-br-md last:rounded-bl-md focus:outline-hidden has-checked:relative has-checked:border-indigo-200 has-checked:bg-indigo-50">
+                        <span class="block text-sm font-medium text-gray-900 group-has-checked:text-indigo-900 group-has-disabled:text-gray-300">{{ $workout["name"] }}</span>
                         <input type="radio" name="workout_id" value="{{ $workout["id"] }}"
                                class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"/>
                     </label>
                 @endforeach
-            </div>
         </fieldset>
         <div class="flex gap-2 justify-end">
             <button type="button" command="close" commandfor="workouts-modal"
