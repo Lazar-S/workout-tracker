@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             $middleware->appendToGroup("web", \App\Http\Middleware\CspHeaders::class);
         }
         $middleware->appendToGroup("web", \App\Http\Middleware\TrackDevices::class);
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

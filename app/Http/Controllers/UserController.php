@@ -60,4 +60,11 @@ class UserController extends Controller
 
         return redirect('/login');
     }
+
+    public function search(): string
+    {
+        $username = request()->username;
+        $users = User::where('public', true)->where('username', $username)->get();
+        return $users->toJson();
+    }
 }

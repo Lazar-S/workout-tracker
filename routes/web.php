@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
@@ -76,3 +77,9 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
     return redirect('/tracker');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/search', [UserController::class, 'search'])->middleware('auth:sanctum');
+
+
+//API
+Route::post("/api/login", [AuthController::class, "login"]);
+Route::get("/api/routine", [AuthController::class, "getRoutines"])->middleware('auth:sanctum');
