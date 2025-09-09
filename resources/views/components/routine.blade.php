@@ -138,9 +138,7 @@
                 return template.content;
             });
             const output = document.querySelector("#my-workouts");
-            if (output) {
-                output.appendChild(...newElements);
-            }
+            if (output) output.append(...newElements)
         })();
     </script>
 </fieldset>
