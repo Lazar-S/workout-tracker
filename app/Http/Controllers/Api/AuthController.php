@@ -58,8 +58,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Routines retrieved successfully',
-            'user_id' => $user->id,
-            'routines' => $routines, // later replace with real routines
+            'routines' => $routines,
         ], 200);
     }
 
@@ -82,12 +81,7 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Added new routine successfully',
-            'routine' => [
-                'id' => $routine->id,
-                'workout_id' => $routine->workout_id,
-                'workout_name' => $routine->workout_name,
-            ],
+            'routine' => $routine,
         ], 201);
     }
 
@@ -106,22 +100,26 @@ class AuthController extends Controller
             'reps' => $request->reps,
         ];
 
-        if($data['sets'] < 0 || $data['reps'] < 0){
-            return response()->json([
-                'message' => 'Unprocessable, "sets" and "reps" must be 0 or higher',
-            ], 422);
-        }
-
-        $routine = WorkoutRoutine::where('id', $request->id)->update($data);
-
         return response()->json([
-            'message' => 'Updated routine successfully',
-            'routine' => [
-                'id' => $routine->id,
-                'sets' => $routine->workout_id,
-                'reps' => $routine->workout_name,
-            ],
+            'id' => $request->id
         ], 200);
+//
+//        if($data['sets'] < 0 || $data['reps'] < 0){
+//            return response()->json([
+//                'message' => 'Unprocessable, "sets" and "reps" must be 0 or higher',
+//            ], 422);
+//        }
+//
+//        $routine = WorkoutRoutine::where('id', $request->id)->update($data);
+//
+//        return response()->json([
+//            'message' => 'Updated routine successfully',
+//            'routine' => [
+//                'id' => $routine->id,
+//                'sets' => $routine->workout_id,
+//                'reps' => $routine->workout_name,
+//            ],
+//        ], 200);
     }
 
     public function deleteRoutine(Request $request): JsonResponse
@@ -138,14 +136,13 @@ class AuthController extends Controller
 
         if($routine->id !== $user->id){
             return response()->json([
-                'message' => 'Forbidden, this is not your routine',
+                "id" => $routine->id
             ], 403);
         }
 
         $routine->delete();
 
         return response()->json([
-            'message' => 'Deleted routine successfully',
             'deleted_id' => $routine->id
         ], 200);
     }
