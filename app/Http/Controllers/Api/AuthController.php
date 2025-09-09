@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Workout;
 use App\Models\WorkoutRoutine;
 use Illuminate\Http\JsonResponse;
@@ -146,6 +147,26 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Deleted routine successfully',
             'deleted_id' => $routine->id
+        ], 200);
+    }
+
+    public function makePublic(Request $request): JsonResponse
+    {
+        $user = $request->user(); // Sanctum resolves this from the session
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated',
+            ], 401);
+        }
+
+        $data = User::find($user->id);
+        $data->public = $request->public;
+        $data->save();
+
+        return response()->json([
+            'message' => 'Updated user successfully',
+            'public' => $data->public
         ], 200);
     }
 }
