@@ -1,0 +1,46 @@
+@props(["workouts"])
+<dialog id="workouts-modal" aria-labelledby="dialog-title"
+        class="fixed inset-2 m-auto backdrop:bg-gray-600/50 rounded-md">
+    <div tabindex="0"
+         class="rounded-md relative inline-flex flex-col gap-8 bg-white justify-center p-4 focus:outline-none">
+        <div class="absolute top-0 right-0 pt-4 pr-4">
+            <button type="button" command="close" commandfor="workouts-modal"
+                    class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600">
+                <span class="sr-only">Close</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon"
+                     aria-hidden="true" class="size-6">
+                    <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="flex items-start">
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                <h3 id="dialog-title" class="text-base font-semibold text-gray-900">Choose workout</h3>
+                <div class="mt-2">
+                    <p class="text-sm text-gray-500">Pick a workout you want to create and press create.</p>
+                </div>
+            </div>
+        </div>
+        <fieldset class="px-4">
+            <div class="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">
+                @foreach ($workouts as $workout)
+                    <label class="flex justify-between items-center py-4 font-medium text-sm/6 text-gray-900 select-none">
+                        {{ $workout["name"] }}
+                        <input type="radio" name="workout_id" value="{{ $workout["id"] }}"
+                               class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"/>
+                    </label>
+                @endforeach
+            </div>
+        </fieldset>
+        <div class="flex gap-2 justify-end">
+            <button type="button" command="close" commandfor="workouts-modal"
+                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto">
+                Create Workout
+            </button>
+            <button type="button" command="close" commandfor="workouts-modal"
+                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                Cancel
+            </button>
+        </div>
+    </div>
+</dialog>

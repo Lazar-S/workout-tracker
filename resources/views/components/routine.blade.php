@@ -1,3 +1,4 @@
+@props(["workouts"])
 <fieldset class="p-4 inline-flex flex-col gap-4 min-w-122 h-full" aria-label="My workouts">
     <h2 class="text-center px-4 text-2xl/9 font-base tracking-tight">My workouts</h2>
     <div class="flex items-center justify-end gap-3 px-2">
@@ -10,11 +11,15 @@
         </div>
     </div>
     <button
+        type="button"
+        commandfor="workouts-modal"
+        command="show-modal"
         class="rounded-sm bg-indigo-600 p-4 text-base font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        type="button" id="add-workout">Add a workout
+    >Add a workout
     </button>
     <div id="my-workouts" class="space-y-4 flex-1 min-h-0 overflow-auto">
     </div>
+    <x-workouts-modal :$workouts />
     <script>
         let workouts = {};
 
@@ -64,7 +69,7 @@
         }
 
         function createWorkoutElement(id, name, sets, reps) {
-            workouts[`workout-${id}`] = {id, name, sets, reps};
+            workouts[`workout-${ id }`] = { id, name, sets, reps };
             return `{{ view(
                 "components.workout", [
                     "id" => "\${id}",
@@ -80,15 +85,10 @@
         }
 
         let counter = 5;
-        document.querySelector("#add-workout").addEventListener("click", () => {
-            // @todo: remove placeholder code
-            // @todo: Open modal or something
-            // @todo: maybe disable button when that UI is open
-            const output = document.querySelector("#my-workouts");
-            if (output) {
-                output.innerHTML += createWorkoutElement(counter++, "Workout name that wraps", 0, 0);
-            }
-        });
+        // const output = document.querySelector("#my-workouts");
+        // if (output) {
+        // output.innerHTML += createWorkoutElement(counter++, "Workout name that wraps", 0, 0);
+        // }
 
         document.querySelector("#make-public").addEventListener("click", async (e) => {
             // maybe disable button while the change is happening
@@ -112,7 +112,11 @@
          */
 
         (async function () {
-            const response = await fetch("/api/routine", { method: "GET", credentials: "include", headers: {"Accept": "application/json"} });
+            const response = await fetch("/api/routine", {
+                method: "GET",
+                credentials: "include",
+                headers: { "Accept": "application/json" }
+            });
             const json = await response.json(); // json is an object or array, depending on what your response body is
             /**
              * { routines: { id: number; workout_name: string; sets: number; reps; number;  }[] }
@@ -123,7 +127,9 @@
                 return template.content;
             });
             const output = document.querySelector("#my-workouts");
-            if (output) { output.appendChild(...newElements); }
+            if (output) {
+                output.appendChild(...newElements);
+            }
         })();
     </script>
 </fieldset>
