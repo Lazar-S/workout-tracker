@@ -100,26 +100,20 @@ class AuthController extends Controller
             'reps' => $request->reps,
         ];
 
+        if($data['sets'] < 0 || $data['reps'] < 0){
+            return response()->json([
+                'message' => 'Unprocessable, "sets" and "reps" must be 0 or higher',
+            ], 422);
+        }
+
+        $routine = WorkoutRoutine::find($request->id);
+        $routine->sets = $data['sets'];
+        $routine->reps = $data['reps'];
+        $routine->save();
+
         return response()->json([
-            'id' => $request->id
+            'routine' => $routine,
         ], 200);
-//
-//        if($data['sets'] < 0 || $data['reps'] < 0){
-//            return response()->json([
-//                'message' => 'Unprocessable, "sets" and "reps" must be 0 or higher',
-//            ], 422);
-//        }
-//
-//        $routine = WorkoutRoutine::where('id', $request->id)->update($data);
-//
-//        return response()->json([
-//            'message' => 'Updated routine successfully',
-//            'routine' => [
-//                'id' => $routine->id,
-//                'sets' => $routine->workout_id,
-//                'reps' => $routine->workout_name,
-//            ],
-//        ], 200);
     }
 
     public function deleteRoutine(Request $request): JsonResponse
