@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Workout;
 use App\Models\WorkoutRoutine;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -61,7 +62,7 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function addRoutine(Request $request): JsonResponse
+    public function createRoutine(Request $request): JsonResponse
     {
         $user = $request->user(); // Sanctum resolves this from the session
 
@@ -71,10 +72,12 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $workout = Workout::find($request->workout_id);
+
         $routine = WorkoutRoutine::create([
             'user_id' => $user->id,
             'workout_id' => $request->workout_id,
-            'workout_name' => $request->workout_name,
+            'workout_name' => $workout->name,
         ]);
 
         return response()->json([
@@ -84,19 +87,65 @@ class AuthController extends Controller
                 'workout_id' => $routine->workout_id,
                 'workout_name' => $routine->workout_name,
             ],
-        ]);
+        ], 201);
     }
 
-//    public function updateRoutine(Request $request): JsonResponse
-//    {
-//        $user = $request->user(); // Sanctum resolves this from the session
-//
-//        if (!$user) {
-//            return response()->json([
-//                'message' => 'Unauthenticated',
-//            ], 401);
-//        }
-//
-//        $routine = WorkoutRoutine::find($request->id);
-//    }
+    public function updateRoutine(Request $request): JsonResponse
+    {
+        $user = $request->user(); // Sanctum resolves this from the session
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated',
+            ], 401);
+        }
+
+        $data = [
+            'sets' => $request->sets,
+            'reps' => $request->reps,
+        ];
+
+        if($data['sets'] < 0 || $data['reps'] < 0){
+            return response()->json([
+                'message' => 'Unprocessable, "sets" and "reps" must be 0 or higher',
+            ], 422);
+        }
+
+        $routine = WorkoutRoutine::where('id', $request->id)->update($data);
+
+        return response()->json([
+            'message' => 'Updated routine successfully',
+            'routine' => [
+                'id' => $routine->id,
+                'sets' => $routine->workout_id,
+                'reps' => $routine->workout_name,
+            ],
+        ], 200);
+    }
+
+    public function deleteRoutine(Request $request): JsonResponse
+    {
+        $user = $request->user(); // Sanctum resolves this from the session
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated',
+            ], 401);
+        }
+
+        $routine = WorkoutRoutine::find($request->id);
+
+        if($routine->id !== $user->id){
+            return response()->json([
+                'message' => 'Forbidden, this is not your routine',
+            ], 403);
+        }
+
+        $routine->delete();
+
+        return response()->json([
+            'message' => 'Deleted routine successfully',
+            'deleted_id' => $routine->id
+        ], 200);
+    }
 }

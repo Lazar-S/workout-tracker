@@ -83,6 +83,7 @@ Route::get('/search', [UserController::class, 'search'])->middleware('auth:sanct
 
 //API
 Route::post("/api/login", [AuthController::class, "login"]);
-Route::get("/api/routine", [AuthController::class, "getRoutines"])->middleware('auth:sanctum');
-Route::post("/api/routine", [AuthController::class, "addRoutine"])->middleware('auth:sanctum');
-//Route::put("/api/routine", [AuthController::class, "updateRoutine"])->middleware('auth:sanctum');
+Route::get("/api/get-routine", [AuthController::class, "getRoutines"])->middleware('auth:sanctum');
+Route::post("/api/create-routine", [AuthController::class, "createRoutine"])->middleware('auth:sanctum');
+Route::put("/api/update-routine", [AuthController::class, "updateRoutine"])->middleware('auth:sanctum');
+Route::delete("/api/delete-routine", [AuthController::class, "deleteRoutine"])->middleware('auth:sanctum');
