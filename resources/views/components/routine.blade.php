@@ -229,7 +229,7 @@
             const response = await fetch(`/api/routines/${workoutId}`, {
                 method: "DELETE",
                 credentials: "include",
-                headers: { "Accept": "application/json", "X-XSRF-TOKEN": token }
+                headers: { "Accept": "application/json", "Authorization": `Bearer ${token}` }
             });
             if (!response.ok) throw new Error("Failed to update routine");
         }
