@@ -2,12 +2,12 @@
 <fieldset class="p-4 inline-flex flex-col gap-4 min-w-122 h-full" aria-label="My workouts">
     <h2 class="text-center px-4 text-2xl/9 font-base tracking-tight">My workouts</h2>
     <div class="flex items-center justify-end gap-3 px-2">
-        <label id="make-public" class="text-sm font-medium text-gray-900">Make public</label>
+        <label class="text-sm font-medium text-gray-900">Make public</label>
         <div
             class="group relative inline-flex w-11 shrink-0 rounded-full bg-gray-200 p-0.5 inset-ring inset-ring-gray-900/5 outline-offset-2 outline-indigo-600 transition-colors duration-200 ease-in-out has-checked:bg-indigo-600 has-focus-visible:outline-2">
             <span
                 class="size-5 rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-5"></span>
-            <input type="checkbox" name="public" class="absolute inset-0 appearance-none focus:outline-hidden"/>
+            <input id="make-public" type="checkbox" name="public" class="absolute inset-0 appearance-none focus:outline-hidden"/>
         </div>
     </div>
     <button
@@ -27,8 +27,10 @@
             const workoutElement = incrBtn.closest("label");
             const id = workoutElement && workoutElement.dataset.id;
             incrBtn.disabled = true;
-            const { sets } = await updateWorkout(id, { sets: oldSets + 1 })
-            output.textContent = "" + sets;
+            try {
+                const { sets } = await updateWorkout(id, { sets: oldSets + 1 })
+                output.textContent = "" + sets;
+            } catch (e) { console.warn(e.message); }
             incrBtn.disabled = false;
         }
 
@@ -39,9 +41,14 @@
             const workoutElement = decrBtn.closest("label");
             const id = workoutElement && workoutElement.dataset.id;
             decrBtn.disabled = true;
-            const { sets } = await updateWorkout(id, { sets: oldSets - 1 })
-            output.textContent = "" + sets;
-            if (sets > 0) decrBtn.disabled = false;
+            try {
+                const { sets } = await updateWorkout(id, { sets: oldSets - 1 })
+                output.textContent = "" + sets;
+                if (sets > 0) decrBtn.disabled = false;
+            } catch (e) {
+                console.warn(e.message);
+                decrBtn.disabled = false;
+            }
         }
 
         async function incrementRep(e) {
@@ -51,8 +58,10 @@
             const workoutElement = incrBtn.closest("label");
             const id = workoutElement && workoutElement.dataset.id;
             incrBtn.disabled = true;
-            const { reps } = await updateWorkout(id, { reps: oldReps + 1 })
-            output.textContent = "" + reps;
+            try {
+                const { reps } = await updateWorkout(id, { reps: oldReps + 1 })
+                output.textContent = "" + reps;
+            } catch (e) { console.warn(e.message); }
             incrBtn.disabled = false;
         }
 
@@ -63,9 +72,14 @@
             const workoutElement = decrBtn.closest("label");
             const id = workoutElement && workoutElement.dataset.id;
             decrBtn.disabled = true;
-            const { reps } = await updateWorkout(id, { reps: oldReps - 1 })
-            output.textContent = "" + reps;
-            if (reps > 0) decrBtn.disabled = false;
+            try {
+                const { reps } = await updateWorkout(id, { reps: oldReps - 1 })
+                output.textContent = "" + reps;
+                if (reps > 0) decrBtn.disabled = false;
+            } catch (e) {
+                console.warn(e.message);
+                decrBtn.disabled = false;
+            }
         }
 
         async function deleteWorkout(e) {
@@ -73,8 +87,13 @@
             const workoutElement = e.currentTarget.closest("label");
             const id = workoutElement && workoutElement.dataset.id;
             delBtn.disabled = true;
-            await removeWorkout(id);
-            if (workoutElement) workoutElement.remove();
+            try {
+                await removeWorkout(id);
+                if (workoutElement) workoutElement.remove();
+            } catch (e) {
+                console.warn(e.message);
+                delBtn.disabled = false;
+            }
         }
 
         function createWorkoutElement(id, workoutId, name, sets, reps) {
@@ -112,13 +131,17 @@
             if (dialog) dialog.showModal();
         });
 
-        document.querySelector("#make-public").addEventListener("click", async (e) => {
+        document.querySelector("#make-public").addEventListener("change", async (e) => {
             // maybe disable button while the change is happening
-            const button = e.currentTarget;
-            button.disabled = true;
-            // const response = await fetch();
+            const checkbox = e.currentTarget;
+            checkbox.disabled = true;
+            try {
+                await makePublic(checkbox.checked)
+            } catch {
+                checkbox.checked = !checkbox.checked;
+            }
             // enable button after response
-            button.disabled = false;
+            checkbox.disabled = false;
         });
 
         /**
@@ -188,13 +211,13 @@
                 const newElement = createWorkoutElement(id, workout_id, workout_name, sets, reps);
                 const output = document.querySelector("#my-workouts");
                 if (output) output.append(newElement);
+                const dialog = document.querySelector("#workouts-modal");
+                dialog.close();
             } catch(e) {
                 console.warn(e.message);
             }
 
             if (btn) btn.disabled = false;
-            const dialog = document.querySelector("#workouts-modal");
-            dialog.close();
         });
 
         // data is { sets?: number; reps?: number; }
@@ -225,6 +248,24 @@
                 headers: { "Accept": "application/json", "X-XSRF-TOKEN": token }
             });
             if (!response.ok) throw new Error("Failed to update routine");
+        }
+
+        async function makePublic(isPublic) {
+            await fetch("/sanctum/csrf-cookie");
+            const token = getCookieValue("XSRF-TOKEN");
+            const response = await fetch(`/api/make-public`, {
+                method: "PATCH",
+                credentials: "include",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": token,
+                },
+                body: JSON.stringify({ "public": isPublic })
+            });
+            if (!response.ok) throw new Error("Failed to update routine");
+            const responseJson = await response.json();
+            return { "public": responseJson };
         }
     </script>
 </fieldset>
