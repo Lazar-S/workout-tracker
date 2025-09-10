@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -38,8 +39,8 @@ class UserController extends Controller
     /**
      * @throws ValidationException
      */
-    public function login(): RedirectResponse {
-        $attributes = request()->validate([
+    public function login(Request $request): RedirectResponse {
+        $attributes = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);

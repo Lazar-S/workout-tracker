@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -21,32 +22,30 @@ class AuthController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(Request $request): JsonResponse
+    public function issueToken(Request $request): JsonResponse
     {
-        // Validate request
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'token_name' => 'required',
         ]);
 
-        // Attempt authentication
-        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
-            ])->status(401); // Return 401 Unauthorized
+            ]);
         }
 
-        $request->session()->regenerate();
+        $token = $user->createToken($request->token_name)->plainTextToken;
 
-        return response()->json([
-            'message' => 'Login successful',
-            'user' => Auth::user(),
-        ], 200);
+        return response()->json(['token' => $token]);
     }
 
     public function getRoutines(Request $request): JsonResponse
     {
-        $user = $request->user(); // Sanctum resolves this from the session
+        $user = $request->user();
 
         if (!$user) {
             return response()->json([
@@ -57,14 +56,13 @@ class AuthController extends Controller
         $routines = WorkoutRoutine::where('user_id', $user->id)->whereDate('created_at', Carbon::today())->get();
 
         return response()->json([
-            'message' => 'Routines retrieved successfully',
             'routines' => $routines,
         ], 200);
     }
 
     public function createRoutine(Request $request): JsonResponse
     {
-        $user = $request->user(); // Sanctum resolves this from the session
+        $user = $request->user();
 
         if (!$user) {
             return response()->json([
@@ -76,7 +74,7 @@ class AuthController extends Controller
 
         $routine = WorkoutRoutine::create([
             'user_id' => $user->id,
-            'workout_id' => $request->workout_id,
+            'workout_id' => $workout->id,
             'workout_name' => $workout->name,
         ]);
 
@@ -87,7 +85,7 @@ class AuthController extends Controller
 
     public function updateRoutine(Request $request, int $id): JsonResponse
     {
-        $user = $request->user(); // Sanctum resolves this from the session
+        $user = $request->user();
 
         if (!$user) {
             return response()->json([
@@ -118,7 +116,7 @@ class AuthController extends Controller
 
     public function deleteRoutine(Request $request, int $id): JsonResponse
     {
-        $user = $request->user(); // Sanctum resolves this from the session
+        $user = $request->user();
 
         if (!$user) {
             return response()->json([
@@ -128,7 +126,7 @@ class AuthController extends Controller
 
         $routine = WorkoutRoutine::find($id);
 
-        if($routine->id !== $user->id){
+        if($routine->user_id !== $user->id){
             return response()->json([
                 "id" => $routine->id
             ], 403);
@@ -136,14 +134,12 @@ class AuthController extends Controller
 
         $routine->delete();
 
-        return response()->json([
-            'deleted_id' => $routine->id
-        ], 200);
+        return response()->json([], 204);
     }
 
     public function makePublic(Request $request): JsonResponse
     {
-        $user = $request->user(); // Sanctum resolves this from the session
+        $user = Auth::user();
 
         if (!$user) {
             return response()->json([
