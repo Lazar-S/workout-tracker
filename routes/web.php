@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use App\Models\Workout;

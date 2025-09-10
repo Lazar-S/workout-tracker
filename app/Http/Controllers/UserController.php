@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
@@ -52,6 +53,9 @@ class UserController extends Controller
         }
 
         request()->session()->regenerate();
+
+        $token = Auth::user()->createToken(Str::random(10))->plainTextToken;
+        setcookie('api_token', $token, time()+7200, "/");
 
         return redirect('/tracker');
     }
