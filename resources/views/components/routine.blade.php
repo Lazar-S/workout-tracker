@@ -144,19 +144,6 @@
             checkbox.disabled = false;
         });
 
-        /**
-         * fetch("url", {
-         *   method:"POST",
-         *   credentials: "include",
-         *   headers: {
-         *     "Accept": "application/json",
-         *     "Content-Type": "application/json"
-         *   },
-         *   body: JSON.stringify({ the: "data" })
-         *  }
-         */
-
-
         (async function () {
             const response = await fetch("/api/routines", {
                 method: "GET",
@@ -179,15 +166,14 @@
         }
 
         async function createWorkout(workoutId) {
-            await fetch("/sanctum/csrf-cookie");
-            const token = getCookieValue("XSRF-TOKEN");
+            const token = getCookieValue("api_token");
             const response = await fetch("/api/routines", {
                 method: "POST",
                 credentials: "include",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "X-XSRF-TOKEN": token,
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({ workout_id: workoutId })
             });
@@ -222,15 +208,14 @@
 
         // data is { sets?: number; reps?: number; }
         async function updateWorkout(workoutId, data) {
-            await fetch("/sanctum/csrf-cookie");
-            const token = getCookieValue("XSRF-TOKEN");
+            const token = getCookieValue("api_token");
             const response = await fetch(`/api/routines/${workoutId}`, {
                 method: "PATCH",
                 credentials: "include",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "X-XSRF-TOKEN": token,
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify(data)
             });
@@ -240,8 +225,7 @@
         }
 
         async function removeWorkout(workoutId) {
-            await fetch("/sanctum/csrf-cookie");
-            const token = getCookieValue("XSRF-TOKEN");
+            const token = getCookieValue("api_token");
             const response = await fetch(`/api/routines/${workoutId}`, {
                 method: "DELETE",
                 credentials: "include",
@@ -251,15 +235,14 @@
         }
 
         async function makePublic(isPublic) {
-            await fetch("/sanctum/csrf-cookie");
-            const token = getCookieValue("XSRF-TOKEN");
+            const token = getCookieValue("api_token");
             const response = await fetch(`/api/make-public`, {
                 method: "PATCH",
                 credentials: "include",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "X-XSRF-TOKEN": token,
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({ "public": isPublic })
             });
