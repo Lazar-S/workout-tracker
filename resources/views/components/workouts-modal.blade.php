@@ -1,7 +1,7 @@
 @props(["workouts"])
 <dialog id="workouts-modal" aria-labelledby="dialog-title"
         class="fixed inset-2 m-auto backdrop:bg-gray-600/50 rounded-md">
-    <div tabindex="0"
+    <form id="create-workout-form" tabindex="0"
          class="rounded-md relative inline-flex flex-col gap-8 bg-white justify-center p-4 focus:outline-none">
         <div class="absolute top-0 right-0 pt-4 pr-4">
             <button id="workouts_modal_close_x" type="button"
@@ -22,16 +22,18 @@
             </div>
         </div>
         <fieldset class="px-4">
-                @foreach ($workouts as $workout)
-                    <label class="group flex justify-between items-center border border-gray-200 p-4 first:rounded-tl-md first:rounded-tr-md last:rounded-br-md last:rounded-bl-md focus:outline-hidden has-checked:relative has-checked:border-indigo-200 has-checked:bg-indigo-50">
-                        <span class="block text-sm font-medium text-gray-900 group-has-checked:text-indigo-900 group-has-disabled:text-gray-300">{{ $workout["name"] }}</span>
-                        <input type="radio" name="workout_id" value="{{ $workout["id"] }}"
-                               class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"/>
-                    </label>
-                @endforeach
+            @foreach ($workouts as $workout)
+                <label
+                    class="group flex justify-between items-center border border-gray-200 p-4 first:rounded-tl-md first:rounded-tr-md last:rounded-br-md last:rounded-bl-md focus:outline-hidden has-checked:relative has-checked:border-indigo-200 has-checked:bg-indigo-50">
+                    <span
+                        class="block text-sm font-medium text-gray-900 group-has-checked:text-indigo-900 group-has-disabled:text-gray-300">{{ $workout["name"] }}</span>
+                    <input type="radio" name="workout_id" value="{{ $workout["id"] }}"
+                           class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"/>
+                </label>
+            @endforeach
         </fieldset>
         <div class="flex gap-2 justify-end">
-            <button id="create-workout" type="button"
+            <button type="submit"
                     class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:ml-3 sm:w-auto">
                 Create Workout
             </button>
@@ -40,7 +42,7 @@
                 Cancel
             </button>
         </div>
-    </div>
+    </form>
     <script>
         function closeDialog() {
             const dialog = document.querySelector("#workouts-modal");

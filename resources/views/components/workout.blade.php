@@ -1,6 +1,6 @@
 @props(["id", "workout_id", "name", "sets", "reps", "incrSetFn", "decrSetFn", "incrRepFn", "decrRepFn", "delFn"])
 <label
-    data-id="workout-{{ $id }}"
+    data-id="{{ $id }}"
     data-workout-id="{{ $workout_id }}"
     class="group relative block rounded-lg border border-gray-300 bg-white px-6 py-4 has-checked:outline-2 has-checked:-outline-offset-2 has-checked:outline-indigo-600 has-focus-visible:outline-3 has-focus-visible:-outline-offset-1 sm:flex sm:justify-between">
     <input type="radio" name="workout"
@@ -10,16 +10,16 @@
               <span class="flex items-center gap-2 flex-1">
                   <span class="text-xs">Sets:</span>
                   <x-counter :incrFn="$incrSetFn" :decrFn="$decrSetFn" :count="$sets"
-                             buttonClasses="hidden group-has-checked:block text-gray-300 hover:text-indigo-600"/>
+                             buttonClasses="hidden group-has-checked:block disabled:text-gray-300 text-indigo-600 hover:text-indigo-500"/>
               </span>
               <span class="flex items-center gap-2 flex-1">
                   <span class="text-xs">Reps:</span>
                   <x-counter :incrFn="$incrRepFn" :decrFn="$decrRepFn" :count="$reps"
-                             buttonClasses="hidden group-has-checked:block text-gray-300 hover:text-indigo-600"/>
+                             buttonClasses="hidden group-has-checked:block disabled:text-gray-300 text-indigo-600 hover:text-indigo-500"/>
               </span>
         <span class="flex justify-end flex-1 min-w-10">
                 <button onclick="{{ $delFn }}"
-                        class="hidden group-has-checked:block rounded-sm text-red-600 p-2 hover:text-red-50 hover:bg-red-600"
+                        class="hidden group-has-checked:block rounded-sm text-red-600 disabled:text-gray-300 p-2 not-disabled:hover:text-red-50 not-disabled:hover:bg-red-600"
                         type="button"><svg
                         xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24"
