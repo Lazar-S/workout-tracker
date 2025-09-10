@@ -86,7 +86,7 @@ Route::post("/api/login", [AuthController::class, "login"]);
 
 Route::get("/api/routines", [AuthController::class, "getRoutines"])->middleware('auth:sanctum');
 Route::post("/api/routines", [AuthController::class, "createRoutine"])->middleware('auth:sanctum');
-Route::patch("/api/routines", [AuthController::class, "updateRoutine"])->middleware('auth:sanctum');
-Route::delete("/api/routines", [AuthController::class, "deleteRoutine"])->middleware('auth:sanctum');
+Route::patch("/api/routines/{id}", [AuthController::class, "updateRoutine"])->middleware('auth:sanctum');
+Route::delete("/api/routines/{id}", [AuthController::class, "deleteRoutine"])->middleware('auth:sanctum');
 
 Route::patch("/api/make-public", [AuthController::class, "makePublic"])->middleware('auth:sanctum');

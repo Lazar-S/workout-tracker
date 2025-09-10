@@ -85,7 +85,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function updateRoutine(Request $request): JsonResponse
+    public function updateRoutine(Request $request, int $id): JsonResponse
     {
         $user = $request->user(); // Sanctum resolves this from the session
 
@@ -106,7 +106,7 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $routine = WorkoutRoutine::find($request->id);
+        $routine = WorkoutRoutine::find($id);
         $routine->sets = $data['sets'];
         $routine->reps = $data['reps'];
         $routine->save();
@@ -116,7 +116,7 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function deleteRoutine(Request $request): JsonResponse
+    public function deleteRoutine(Request $request, int $id): JsonResponse
     {
         $user = $request->user(); // Sanctum resolves this from the session
 
@@ -126,7 +126,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $routine = WorkoutRoutine::find($request->id);
+        $routine = WorkoutRoutine::find($id);
 
         if($routine->id !== $user->id){
             return response()->json([
@@ -156,7 +156,6 @@ class AuthController extends Controller
         $data->save();
 
         return response()->json([
-            'message' => 'Updated user successfully',
             'public' => $data->public
         ], 200);
     }
