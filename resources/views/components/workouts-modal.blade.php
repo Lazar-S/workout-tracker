@@ -33,8 +33,8 @@
             @endforeach
         </fieldset>
         <div class="flex gap-2 justify-end">
-            <button type="submit"
-                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:ml-3 sm:w-auto">
+            <button type="submit" disabled
+                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 disabled:bg-gray-300 px-3 py-2 text-sm font-semibold text-white shadow-xs not-disabled:hover:bg-indigo-500 sm:ml-3 sm:w-auto">
                 Create Workout
             </button>
             <button type="button" id="workouts_modal_close_cancel"
@@ -46,6 +46,8 @@
     <script>
         function closeDialog() {
             const dialog = document.querySelector("#workouts-modal");
+            const form = document.querySelector("#create-workout-form");
+            if (form) form.reset();
             if (dialog) dialog.close();
         }
 
@@ -53,5 +55,11 @@
         const closeCancel = document.querySelector("#workouts_modal_close_cancel");
         if (closeX) closeX.addEventListener("click", closeDialog);
         if (closeCancel) closeCancel.addEventListener("click", closeDialog);
+
+        const form = document.querySelector("#create-workout-form");
+        form.addEventListener("change", (e) => {
+            const submit = e.currentTarget.querySelector(`[type="submit"]`);
+            if (submit) submit.disabled = false;
+        });
     </script>
 </dialog>
