@@ -5,7 +5,6 @@ use App\Http\Controllers\UserController;
 use App\Models\User;
 use App\Models\Workout;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -70,7 +69,7 @@ Route::post("/register", [UserController::class, "store"]);
 Route::post("/login", [UserController::class, "login"])->name('login');
 Route::post("/logout", [UserController::class, "logout"]);
 Route::get("/tracker", function() {
-    return view("tracker", ["workouts" => Workout::where('user_id', Auth::user()->id->get()) ]);
+    return view("tracker", ["workouts" => Workout::all() ]);
 })->middleware('auth');
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
