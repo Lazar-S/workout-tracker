@@ -1,5 +1,7 @@
 @props(["workout_routine"])
 <form method="POST" action="/update-routine" class="flex flex-1">
+    @csrf
+    <input type="hidden" name="routine_id" value="{{$workout_routine['id']}}">
     <label
         data-id="{{ $workout_routine['id'] }}"
         data-workout-id="{{ $workout_routine['workout_id'] }}"
@@ -39,33 +41,36 @@
         </span>
     </label>
     <script>
-        const formElement = document.currentScript.parentElement;
-        formElement.addEventListener("submit", e => {
-            e.preventDefault();
+        {
+            const formElement = document.currentScript.parentElement;
+            formElement.addEventListener("submit", e => {
+                e.preventDefault();
 
-            const form = e.currentTarget;
-            const btn = e.submitter;
-            const action = btn.dataset.action;
-            let name, input;
-            switch(action) {
-                case "increment":
-                    name = btn.dataset.name;
-                    input = form.querySelector(`input[name="${name}"]`);
-                    if (input) input.value = Number(input.value) + 1;
-                    break;
-                case "decrement":
-                    name = btn.dataset.name;
-                    input = form.querySelector(`input[name="${name}"]`);
-                    if (input) input.value = Number(input.value) - 1;
-                    break;
-                case "delete":
-                    input = form.querySelector(`input[name="${action}"]`);
-                    if (input) input.value = "true";
-                    break
-            }
+                const form = e.currentTarget;
+                const btn = e.submitter;
+                const action = btn.dataset.action;
+                let name, input;
+                switch (action) {
+                    case "increment":
+                        name = btn.dataset.name;
+                        input = form.querySelector(`input[name="${name}"]`);
+                        if (input) input.value = Number(input.value) + 1;
+                        console.log(input);
+                        break;
+                    case "decrement":
+                        name = btn.dataset.name;
+                        input = form.querySelector(`input[name="${name}"]`);
+                        if (input) input.value = Number(input.value) - 1;
+                        break;
+                    case "delete":
+                        input = form.querySelector(`input[name="${action}"]`);
+                        if (input) input.value = "true";
+                        break
+                }
 
-            form.submit();
-        });
+                form.submit();
+            });
+        }
     </script>
 </form>
 

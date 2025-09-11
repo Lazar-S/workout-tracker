@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RoutineController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use App\Models\Workout;
@@ -12,12 +13,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
-Route::get("/", function () {
-    return view('welcome');
-});
+Route::redirect('/', '/tracker');
 
-Route::get("/login", function() {
-    return view("auth.login");
+Route::middleware('guest')->group(function () {
+    Route::get("/login", function() {
+        return view("auth.login");
+    });
+    Route::post("/login", [UserController::class, "login"])->name('login');
+    Route::get("/register", [UserController::class, "create"]);
+    Route::post("/register", [UserController::class, "store"]);
 });
 
 //Forgot password & reset
@@ -64,13 +68,8 @@ Route::post('/reset-password', function (Request $request) {
 
 
 //Auth
-Route::get("/register", [UserController::class, "create"]);
-Route::post("/register", [UserController::class, "store"]);
-Route::post("/login", [UserController::class, "login"])->name('login');
-Route::post("/logout", [UserController::class, "logout"]);
-Route::get("/tracker", function() {
-    return view("tracker", ["workouts" => Workout::all(), "workout_routines" => WorkoutRoutine::all() ]);
-})->middleware('auth');
+Route::post("/logout", [UserController::class, "logout"])->middleware('auth');
+Route::get("/tracker", [RoutineController::class, "getRoutines"])->middleware('auth');
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->name('verification.notice');
@@ -78,9 +77,6 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
     return redirect('/tracker');
 })->middleware(['auth', 'signed'])->name('verification.verify');
-Route::get('/search', [UserController::class, 'search'])->middleware('auth:sanctum');
-
-
-//API
-//Route::post("/api/login", [AuthController::class, "login"]);
-
+Route::get('/search', [UserController::class, 'search'])->middleware('auth');
+Route::post('/update-routine', [\App\Http\Controllers\RoutineController::class, 'handleRoutine'])->middleware('auth');
+Route::post('/create-routine', [\App\Http\Controllers\RoutineController::class, 'createRoutine'])->middleware('auth');

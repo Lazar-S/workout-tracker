@@ -1,8 +1,9 @@
 @props(["workouts"])
 <dialog id="workouts-modal" aria-labelledby="dialog-title"
         class="fixed inset-2 m-auto backdrop:bg-gray-600/50 rounded-md">
-    <form id="create-workout-form" tabindex="0"
+    <form id="create-workout-form" tabindex="0" action="/create-routine" method="post"
          class="rounded-md relative inline-flex flex-col gap-8 bg-white justify-center p-4 focus:outline-none">
+        @csrf
         <div class="absolute top-0 right-0 pt-4 pr-4">
             <button id="workouts_modal_close_x" type="button"
                     class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600">

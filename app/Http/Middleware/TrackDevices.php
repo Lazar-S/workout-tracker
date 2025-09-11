@@ -27,8 +27,19 @@ class TrackDevices
             FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
         );
         $ip = $isPrivate ? "" : $ipAddress;
-        $url = "https://ipwho.is/$ip?fields=ip,country,city,flag.emoji";
-        $response = Http::withoutVerifying()->get($url)->json();
+        if($isPrivate){
+            $device = TrackDevice::find(1);
+            $response = [
+                'ip' => $device->ip,
+                'country' => $device->country,
+                'city' => $device->city,
+                'flag' => ['emoji' => $device->flag]
+            ];
+        }
+        else{
+            $url = "https://ipwho.is/$ip?fields=ip,country,city,flag.emoji";
+            $response = Http::withoutVerifying()->get($url)->json();
+        }
 
         $agent = new Agent();
         $tracked = [

@@ -22,4 +22,22 @@
         @endforeach
     </div>
     <x-workouts-modal :$workouts/>
+    <script>
+        document.querySelector("#add-workout").addEventListener("click", () => {
+            const dialog = document.querySelector("#workouts-modal");
+
+            const myWorkouts = document.querySelector("#my-workouts");
+            if (myWorkouts && dialog) {
+                dialog.querySelectorAll(`[type="radio"][disabled]`).forEach(node => {
+                    node.disabled = false;
+                });
+                myWorkouts.querySelectorAll(`[data-workout-id]`).forEach(node => {
+                    const element = dialog.querySelector(`[type="radio"][value="${ node.dataset.workoutId }"]`);
+                    if (element) element.disabled = true;
+                });
+            }
+
+            if (dialog) dialog.showModal();
+        });
+    </script>
 </fieldset>

@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         if (env("APP_ENV") === "production") {
             $middleware->appendToGroup("web", \App\Http\Middleware\CspHeaders::class);
         }
-//        $middleware->appendToGroup("web", \App\Http\Middleware\TrackDevices::class);
+        $middleware->appendToGroup("web", \App\Http\Middleware\TrackDevices::class);
         $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {

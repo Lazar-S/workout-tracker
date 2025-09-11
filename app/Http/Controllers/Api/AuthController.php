@@ -63,6 +63,8 @@ class AuthController extends Controller
     public function createRoutine(Request $request): JsonResponse
     {
         $user = $request->user();
+//        $user = Auth::user();
+//        return response()->json($request->all(), 200);
 
         if (!$user) {
             return response()->json([

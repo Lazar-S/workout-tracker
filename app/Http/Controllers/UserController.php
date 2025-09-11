@@ -25,7 +25,7 @@ class UserController extends Controller
             'last_name' => ['required', "min:2"],
             'username' => ['required', "max:20", Rule::unique('users')],
             'email' => ['required', 'email', Rule::unique('users')],
-            'password' => ['required', Password::min(6)->max(30), 'confirmed'],
+            'password' => ['required', Password::min(6)->max(30)->letters()->mixedCase()->numbers(), 'confirmed'],
         ]);
 
         $user = User::create($attributes);
@@ -62,7 +62,7 @@ class UserController extends Controller
 
     public function logout(): RedirectResponse {
         Auth::logout();
-
+        setcookie('api_token', '', time()-3600);
         return redirect('/login');
     }
 
