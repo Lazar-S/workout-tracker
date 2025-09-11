@@ -1,26 +1,31 @@
-@props(["id", "workout_id", "name", "sets", "reps", "incrSetFn", "decrSetFn", "incrRepFn", "decrRepFn", "delFn"])
-<label
-    data-id="{{ $id }}"
-    data-workout-id="{{ $workout_id }}"
-    class="group relative block rounded-lg border border-gray-300 bg-white px-6 py-4 has-checked:outline-2 has-checked:-outline-offset-2 has-checked:outline-indigo-600 has-focus-visible:outline-3 has-focus-visible:-outline-offset-1 sm:flex sm:justify-between">
-    <input type="radio" name="workout"
-           class="w-0 h-0 appearance-none focus:outline-none"/>
-    <span class="flex text-sm basis-2xl gap-6 items-center">
-              <span class="font-medium text-gray-900 flex-4">{{ $name }}</span>
+@props(["workout_routine"])
+<form method="POST" action="/update-routine" class="flex flex-1">
+    <label
+        data-id="{{ $workout_routine['id'] }}"
+        data-workout-id="{{ $workout_routine['workout_id'] }}"
+        class="group relative flex flex-1 rounded-lg border border-gray-300 bg-white px-6 py-4 has-checked:outline-2 has-checked:-outline-offset-2 has-checked:outline-indigo-600 has-focus-visible:outline-3 has-focus-visible:-outline-offset-1">
+        <input type="radio" name="workout"
+               class="w-0 h-0 appearance-none focus:outline-none"/>
+        <span class="flex text-sm basis-2xl gap-6 items-center">
+              <span class="font-medium text-gray-900 flex-4">{{ $workout_routine['workout_name'] }}</span>
               <span class="flex items-center gap-2 flex-1">
                   <span class="text-xs">Sets:</span>
-                  <x-counter :incrFn="$incrSetFn" :decrFn="$decrSetFn" :count="$sets"
+                  <input type="hidden" name="sets" value="{{$workout_routine['sets']}}">
+                  <x-counter name="sets" :count="$workout_routine['sets']"
                              buttonClasses="hidden group-has-checked:block disabled:text-gray-300 text-indigo-600 hover:text-indigo-500"/>
               </span>
               <span class="flex items-center gap-2 flex-1">
                   <span class="text-xs">Reps:</span>
-                  <x-counter :incrFn="$incrRepFn" :decrFn="$decrRepFn" :count="$reps"
+                  <input type="hidden" name="reps" value="{{$workout_routine['reps']}}">
+                  <x-counter name="reps" :count="$workout_routine['reps']"
                              buttonClasses="hidden group-has-checked:block disabled:text-gray-300 text-indigo-600 hover:text-indigo-500"/>
               </span>
         <span class="flex justify-end flex-1 min-w-10">
-                <button onclick="{{ $delFn }}"
-                        class="hidden group-has-checked:block rounded-sm text-red-600 disabled:text-gray-300 p-2 not-disabled:hover:text-red-50 not-disabled:hover:bg-red-600"
-                        type="button"><svg
+                <input type="hidden" name="delete" value="false">
+                <button
+                    data-action="delete"
+                    class="hidden group-has-checked:block rounded-sm text-red-600 disabled:text-gray-300 p-2 not-disabled:hover:text-red-50 not-disabled:hover:bg-red-600"
+                    type="submit"><svg
                         xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24"
                         viewBox="0 0 24 24"
@@ -32,6 +37,36 @@
                             d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
             </span>
         </span>
-</label>
+    </label>
+    <script>
+        const formElement = document.currentScript.parentElement;
+        formElement.addEventListener("submit", e => {
+            e.preventDefault();
+
+            const form = e.currentTarget;
+            const btn = e.submitter;
+            const action = btn.dataset.action;
+            let name, input;
+            switch(action) {
+                case "increment":
+                    name = btn.dataset.name;
+                    input = form.querySelector(`input[name="${name}"]`);
+                    if (input) input.value = Number(input.value) + 1;
+                    break;
+                case "decrement":
+                    name = btn.dataset.name;
+                    input = form.querySelector(`input[name="${name}"]`);
+                    if (input) input.value = Number(input.value) - 1;
+                    break;
+                case "delete":
+                    input = form.querySelector(`input[name="${action}"]`);
+                    if (input) input.value = "true";
+                    break
+            }
+
+            form.submit();
+        });
+    </script>
+</form>
 
 
