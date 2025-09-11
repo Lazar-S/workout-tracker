@@ -16,8 +16,23 @@ class RoutineController extends Controller
     }
 
     public function getHistory(Request $request){
-        $workout_routines = WorkoutRoutine::where('user_id', $request->user()->id)->whereDate('created_at', '<', Carbon::today())->get();
-        return view("history", [ "workout_routines" => $workout_routines ]);
+        $date = $request->query("date");
+        if (isset($date)) {
+            try {
+                $date = Carbon::parse($date);
+            } catch (\Exception $e) {
+                $date = null;
+            }
+        }
+
+        if (isset($date)) {
+            $view = "specific";
+            $workout_routines = WorkoutRoutine::where('user_id', $request->user()->id)->whereDate('created_at', $date)->get();
+        } else {
+            $view = "all";
+            $workout_routines = WorkoutRoutine::where('user_id', $request->user()->id)->whereDate('created_at', '<', Carbon::today())->get();
+        }
+        return view("history", [ "workout_routines" => $workout_routines, "view" => $view ]);
     }
 
     public function handleRoutine(Request $request): RedirectResponse{
