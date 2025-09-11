@@ -1,10 +1,15 @@
 <div class="relative z-10 flex flex-col group not-sm:absolute has-checked:h-full">
     <label class="inline-flex p-2 text-gray-600 sm:hidden">
-        <input name="burger" class="invisible h-0 w-0" type="checkbox" />
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect class="transition-transform duration-200 rotate-0 translate-0 group-has-checked:rotate-45 group-has-checked:translate-x-[25%] group-has-checked:translate-y-[12%]" x="0" y="1" height="2" width="24" />
-            <rect class="group-has-checked:hidden" x="0" y="9" height="2" width="24" />
-            <rect class="transition-transform duration-200 rotate-0 translate-0 group-has-checked:-rotate-45 group-has-checked:translate-x-[-34%] group-has-checked:translate-y-[34%]" x="0" y="17" height="2" width="24" />
+        <input name="burger" class="invisible h-0 w-0" type="checkbox"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect
+                class="transition-transform duration-200 rotate-0 translate-0 group-has-checked:rotate-45 group-has-checked:translate-x-[25%] group-has-checked:translate-y-[12%]"
+                x="0" y="1" height="2" width="24"/>
+            <rect class="group-has-checked:hidden" x="0" y="9" height="2" width="24"/>
+            <rect
+                class="transition-transform duration-200 rotate-0 translate-0 group-has-checked:-rotate-45 group-has-checked:translate-x-[-34%] group-has-checked:translate-y-[34%]"
+                x="0" y="17" height="2" width="24"/>
         </svg>
     </label>
     <div
@@ -21,8 +26,8 @@
         <nav class="relative flex flex-1 flex-col gap-6">
             <ul role="list" class="flex flex-col gap-1">
                 <li>
-                    <a href="#"
-                       class="flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm/6 font-semibold text-indigo-600 px-4">
+                    <a href="/tracker"
+                       class="flex gap-x-3 rounded-md  p-2 text-sm/6 font-semibold px-4 {{ request()->path() == "tracker" ? "text-indigo-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600" }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                              class="lucide lucide-notebook-pen-icon lucide-notebook-pen">
@@ -38,8 +43,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
-                       class="flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600 px-4">
+                    <a href="/history"
+                       class="flex gap-x-3 rounded-md  p-2 text-sm/6 font-semibold px-4 {{ request()->path() == "history" ? "text-indigo-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600" }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-history-icon lucide-history">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                            <path d="M12 7v5l4 2"/>
+                        </svg>
+                        History
+                    </a>
+                </li>
+                <li>
+                    <a href="/followers"
+                       class="flex gap-x-3 rounded-md  p-2 text-sm/6 font-semibold px-4 {{ request()->path() == "followers" ? "text-indigo-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600" }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                              class="lucide lucide-users-round-icon lucide-users-round">
@@ -51,8 +69,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
-                       class="flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600 px-4">
+                    <a href="/search"
+                       class="flex gap-x-3 rounded-md  p-2 text-sm/6 font-semibold px-4 {{ request()->path() == "search" ? "text-indigo-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600" }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                              class="lucide lucide-search-icon lucide-search">
@@ -64,38 +82,40 @@
                 </li>
             </ul>
             @auth
-            <div class="border-t mx-2 border-gray-300"></div>
-            <ul>
-                <li>
-                    <form action="/logout" method="POST">
-                    @csrf
-                    <button type="submit"
-                       class="cursor-pointer flex w-full gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600 px-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                             class="lucide lucide-log-out-icon lucide-log-out">
-                            <path d="m16 17 5-5-5-5"/>
-                            <path d="M21 12H9"/>
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                        </svg>
-                        Logout
-                    </button>
-                    </form>
-                </li>
-            </ul>
+                <div class="border-t mx-2 border-gray-300"></div>
+                <ul>
+                    <li>
+                        <form action="/logout" method="POST">
+                            @csrf
+                            <button type="submit"
+                                    class="cursor-pointer flex w-full gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600 px-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     class="lucide lucide-log-out-icon lucide-log-out">
+                                    <path d="m16 17 5-5-5-5"/>
+                                    <path d="M21 12H9"/>
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                </svg>
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             @endauth
         </nav>
         @auth
-        <div>
-            <a href="#"
-               class="flex items-center gap-x-4 px-4 py-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-50">
-                <div class="flex items-center justify-center bg-gray-400 text-gray-100 size-8 rounded-full ring-2">
-                    {{ strtoupper(Auth::user()->first_name[0]) }}{{ strtoupper(Auth::user()->last_name[0]) }}
-                </div>
-                <span class="sr-only">Your profile</span>
-                <span aria-hidden="true">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
-            </a>
-        </div>
+            <div>
+                <a href="#"
+                   class="flex items-center gap-x-4 px-4 py-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-50">
+                    <div class="flex items-center justify-center bg-gray-400 text-gray-100 size-8 rounded-full ring-2">
+                        {{ strtoupper(Auth::user()->first_name[0]) }}{{ strtoupper(Auth::user()->last_name[0]) }}
+                    </div>
+                    <span class="sr-only">Your profile</span>
+                    <span aria-hidden="true">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
+                </a>
+            </div>
         @endauth
     </div>
 </div>

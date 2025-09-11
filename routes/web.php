@@ -70,6 +70,7 @@ Route::post('/reset-password', function (Request $request) {
 //Auth
 Route::post("/logout", [UserController::class, "logout"])->middleware('auth');
 Route::get("/tracker", [RoutineController::class, "getRoutines"])->middleware('auth');
+Route::get("/history", [RoutineController::class, "getHistory"])->middleware('auth');
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->name('verification.notice');
