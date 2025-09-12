@@ -37,16 +37,19 @@ class RoutineController extends Controller
 
     public function handleRoutine(Request $request): RedirectResponse{
         $routine = WorkoutRoutine::find($request->routine_id);
-        if($request->delete === "true"){
-            $routine->delete();
-        }
-        else {
-            $routine->sets = $request->sets > -1 ? $request->sets : 0;
-            $routine->reps = $request->reps > -1 ? $request->reps : 0;
-            $routine->save();
+        $selected = "";
+        if (isset($routine)) {
+            if ($request->delete === "true") {
+                $routine->delete();
+            } else {
+                $routine->sets = $request->sets > -1 ? $request->sets : 0;
+                $routine->reps = $request->reps > -1 ? $request->reps : 0;
+                $routine->save();
+                $selected = "?selected=$routine->id";
+            }
         }
 
-        return redirect('/tracker');
+        return redirect("/tracker$selected");
     }
 
     public function createRoutine(Request $request): RedirectResponse {

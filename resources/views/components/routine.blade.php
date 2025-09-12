@@ -18,7 +18,8 @@
     </button>
     <div id="my-workouts" class="space-y-4 flex-1 min-h-0 overflow-auto">
         @foreach($workout_routines as $workout_routine)
-            <x-workout :$workout_routine />
+            @php $selected = request()->query("selected") == $workout_routine["id"] @endphp
+            <x-workout :$workout_routine :$selected />
         @endforeach
     </div>
     <x-workouts-modal :$workouts/>
