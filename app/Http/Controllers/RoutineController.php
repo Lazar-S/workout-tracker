@@ -30,7 +30,7 @@ class RoutineController extends Controller
             $workout_routines = WorkoutRoutine::where('user_id', $request->user()->id)->whereDate('created_at', $date)->get();
         } else {
             $view = "all";
-            $workout_routines = WorkoutRoutine::where('user_id', $request->user()->id)->whereDate('created_at', '<', Carbon::today())->get();
+            $workout_routines = WorkoutRoutine::where('user_id', $request->user()->id)->whereDate('created_at', '<', Carbon::today())->orderBy('created_at', 'desc')->get();
         }
         return view("history", [ "workout_routines" => $workout_routines, "view" => $view ]);
     }

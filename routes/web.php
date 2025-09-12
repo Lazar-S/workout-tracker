@@ -68,16 +68,16 @@ Route::post('/reset-password', function (Request $request) {
 
 
 //Auth
-Route::post("/logout", [UserController::class, "logout"])->middleware('auth');
-Route::get("/tracker", [RoutineController::class, "getRoutines"])->middleware('auth');
-Route::get("/history", [RoutineController::class, "getHistory"])->middleware('auth');
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('/tracker');
+    return redirect('/tracker')->with('status', 'Your email is verified.');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post("/logout", [UserController::class, "logout"])->middleware('auth');
+Route::get("/tracker", [RoutineController::class, "getRoutines"])->middleware('auth');
+Route::get("/history", [RoutineController::class, "getHistory"])->middleware('auth');
 Route::get('/search', [UserController::class, 'search'])->middleware('auth');
-Route::post('/update-routine', [\App\Http\Controllers\RoutineController::class, 'handleRoutine'])->middleware('auth');
-Route::post('/create-routine', [\App\Http\Controllers\RoutineController::class, 'createRoutine'])->middleware('auth');
+Route::post('/update-routine', [RoutineController::class, 'handleRoutine'])->middleware('auth');
+Route::post('/create-routine', [RoutineController::class, 'createRoutine'])->middleware('auth');

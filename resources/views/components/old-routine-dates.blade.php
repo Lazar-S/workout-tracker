@@ -5,7 +5,7 @@
         @php $previous = null; @endphp
         @foreach($workout_routines as $workout_routine)
             @if (!isset($previous) || !$workout_routine["created_at"]->isSameDay($previous["created_at"]))
-                <a class="font-semibold text-indigo-600 hover:text-indigo-500 px-1" href="?date={{urlencode($workout_routine["created_at"]->format("Y-m-d"))}}">{{{$workout_routine["created_at"]->format("F j, Y")}}}</a>
+                <a class="font-semibold text-indigo-600 hover:text-indigo-500 px-1" href="?date={{urlencode($workout_routine["created_at"]->format("Y-m-d"))}}">{{$workout_routine["created_at"]->format("F j, Y")}}</a>
             @endif
             @php $previous = $workout_routine; @endphp
         @endforeach

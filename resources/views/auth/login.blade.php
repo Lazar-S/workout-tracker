@@ -9,6 +9,9 @@
         </div>
         <div class="sm:mx-auto sm:w-full sm:max-w-sm md:max-w-md bg-gray-100 p-6 rounded-2xl">
             <form action="/login" method="POST" class="flex flex-col gap-2">
+                @if(session('status'))
+                    <div class="text-sm px-1 min-h-lh">{{session('status')}}</div>
+                @endif
                 @csrf
                 <div class="flex flex-col gap-1">
                     <label for="email" class="block text-sm/6 font-medium text-gray-900 px-1">Email address</label>

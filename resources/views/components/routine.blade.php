@@ -1,6 +1,6 @@
 @props(["workouts", "workout_routines"])
 <fieldset class="p-4 inline-flex flex-col gap-4 min-w-122 h-full" aria-label="My workouts">
-    <h2 class="text-center px-4 text-2xl/9 font-base tracking-tight">My workouts</h2>
+    <h2 class="text-center px-4 text-2xl/9 font-base tracking-tight">Today's workouts</h2>
     <div class="flex items-center justify-end gap-3 px-2">
         <label class="text-sm font-medium text-gray-900">Make public</label>
         <div
